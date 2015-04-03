@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = PowerConverter::VERSION
   spec.authors       = ["Jeremy Friesen"]
   spec.email         = ["jeremy.n.friesen@gmail.com"]
-  spec.summary       = %q{A template for generating and exposing conversion methods/modules.}
-  spec.description   = %q{A template for generating and exposing conversion methods/modules.}
+  spec.summary       = %q{A lightweight library to define object conversion methods/modules.}
+  spec.description   = %q{A lightweight library to define object conversion methods/modules.}
   spec.homepage      = "https://github.com/jeremyf/power_converter"
   spec.license       = "APACHE2"
 
