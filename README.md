@@ -26,8 +26,8 @@ application design boundaries.
 
 Excellent question.
 
-**The short-answer is consistency**. PowerConvert conversions will have a common
-form.
+**The short-answer is consistency**. *PowerConverter* helps you compose
+conversions that have a common form.
 
 **The longer-answer** is again related to consistency By using a common
 mechanism for definition, I'm hoping to reduce the nuanced variations that come
