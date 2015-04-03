@@ -60,4 +60,19 @@ class TestPowerConverter < Minitest::Test
       PowerConverter.convert(true, to: :foo)
     end
   end
+
+  def test_conversion_function_leverages_conversion_via_a_to_method
+    struct = Struct.new(:to_foo)
+    object = struct.new(123)
+    assert_equal(object.to_foo, PowerConverter.convert(object, to: :foo))
+  end
+
+  def test_conversion_function_skips_any_private_to_method
+    struct = Struct.new(:to_foo)
+    struct.send(:private, :to_foo)
+    object = struct.new(123)
+    assert_raises(PowerConverter::ConversionError) do
+      PowerConverter.convert(object, to: :foo)
+    end
+  end
 end

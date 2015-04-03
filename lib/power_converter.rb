@@ -93,7 +93,9 @@ module PowerConverter
   # @api public
   # @since 0.0.1
   #
-  # Convert the given `value` via the named `:to` converter.
+  # Convert the given `value` via the named `:to` converter. As a short-circuit
+  # if the given `value` publicly responds to a `to_<named_converter>` it will
+  # use that.
   #
   # @param value [Object] the thing that you will be converting
   # @param [Hash] options the options used to perform the conversion
@@ -109,17 +111,22 @@ module PowerConverter
   # @example
   #   PowerConverter.convert('true', to: :boolean)
   #
-  # @todo I want to:
-  #   * auto-handle :to_<named_conversion> so I don't need to worry about
-  #     registering that.
+  # @example
+  #   class Foo
+  #     def to_bar
+  #       :hello_world
+  #     end
+  #   end
+  #
+  #   PowerConverter.convert(Foo.new, to: :bar)
+  #   => :hello_world
+  #
   def convert(value, options = {})
     named_converter = options.fetch(:to)
+    return value.public_send("to_#{named_converter}") if value.respond_to?("to_#{named_converter}", false)
     returning_value = converter_for(named_converter).call(value)
-    if returning_value.nil?
-      fail ConversionError.new(value, named_converter)
-    else
-      returning_value
-    end
+    return returning_value unless returning_value.nil?
+    fail ConversionError.new(value, named_converter)
   end
 
   # @api public
