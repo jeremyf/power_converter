@@ -7,9 +7,11 @@ require "power_converter/version"
 #
 # TODO: Define conversion method intent
 module PowerConverter
+  # When you tried to find a named_converter and it did not exist, this is a
+  # reasonable exception to expect.
   class ConverterNotFoundError < RuntimeError
-    def initialize(to, named_converters)
-      super("Unable to find PowerConverter for #{to} in #{named_converters}")
+    def initialize(named_converter, named_converters)
+      super("Unable to find PowerConverter for #{named_converter} in #{named_converters}")
     end
   end
 
