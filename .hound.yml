@@ -1,0 +1,20 @@
+################################################################################
+## Releasing the hounds in your local environment.
+##
+## Setup:
+## $ gem install rubocop
+##
+## Run:
+## $ rubocop ./path/to/file ./or/path/to/directory -c ./.hound.yml
+##
+## Why .hound.yml? So I can integrate with HoundCI if I choose
+##
+################################################################################
+AllCops:
+  Include:
+    - Rakefile
+  RunRailsCops: false
+
+StringLiterals:
+  Description: 'Checks if uses of quotes match the configured preference.'
+  Enabled: false
