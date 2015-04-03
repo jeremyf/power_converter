@@ -50,4 +50,14 @@ class TestPowerConverter < Minitest::Test
   def test_mixed_in_conversion_method_can_be_used
     assert_equal(true, @object.wraps_conversion('1'))
   end
+
+  PowerConverter.define_conversion_for :foo do |input|
+    input.foo if input.respond_to?(:foo)
+  end
+
+  def test_conversion_function_raises_an_error_if_nil_is_returned
+    assert_raises(PowerConverter::ConversionError) do
+      PowerConverter.convert(true, to: :foo)
+    end
+  end
 end

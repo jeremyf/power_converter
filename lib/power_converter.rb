@@ -29,6 +29,19 @@ module PowerConverter
     end
   end
 
+  # When you tried to convert something and it just won't convert, this is a
+  # great exception to raise.
+  class ConversionError < RuntimeError
+    # @param value [Object]
+    # @param named_converter [#to_s]
+    #
+    # @example
+    #   raise ConversionError.new(:boolean, [:hello, :world])
+    def initialize(value, named_converter)
+      super("Unable to convert #{value.inspect} to #{named_converter}")
+    end
+  end
+
   module_function
 
   # @api public
@@ -36,6 +49,10 @@ module PowerConverter
   #
   # Responsible for defining a conversion method and a "shovel-ready" conversion
   # module; because maybe you want a mixin for convenience reasons.
+  #
+  # @note If your defined converter returns `nil`, it is assumed if the
+  #   conversion failed and a [PowerConverter::ConversionError] exception should
+  #   be thrown.
   #
   # @param named_conversion [String,Symbol] the name of the conversion that you
   #   are declaring.
@@ -78,7 +95,10 @@ module PowerConverter
   # @param [Hash] options the options used to perform the conversion
   # @option options [Symbol] :to the named_conversion that has been registered
   #
+  # @return [Object] the resulting converted object
+  #
   # @raise [ConverterNotFoundError] if the named converter is not found
+  # @raise [ConversionError] if the named converter returned a nil value
   #
   # @see PowerConverter.define_conversion_for
   #
@@ -86,11 +106,16 @@ module PowerConverter
   #   PowerConverter.convert('true', to: :boolean)
   #
   # @todo I want to:
-  #   * raise an exception if I'm unable to convert an object
   #   * auto-handle :to_<named_conversion> so I don't need to worry about
   #     registering that.
   def convert(value, options = {})
-    converter_for(options.fetch(:to)).call(value)
+    named_converter = options.fetch(:to)
+    returning_value = converter_for(named_converter).call(value)
+    if returning_value.nil?
+      fail ConversionError.new(value, named_converter)
+    else
+      returning_value
+    end
   end
 
   # @api public
@@ -113,6 +138,9 @@ module PowerConverter
   #       convert_to_boolean(@bar)
   #     end
   #   end
+  #
+  # @todo Make sure I'm adhearing to the same interface as the .convert method.
+  # @todo Allow for the inclusion of multiple power converter named types.
   def module_for(named_conversion)
     converter = converter_for(named_conversion)
     Module.new do
