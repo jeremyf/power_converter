@@ -143,12 +143,14 @@ module PowerConverter
   #     end
   #   end
   #
-  # @todo Make sure I'm adhearing to the same interface as the .convert method.
   # @todo Allow for the inclusion of multiple power converter named types.
   def module_for(named_conversion)
-    converter = converter_for(named_conversion)
     Module.new do
-      define_method("convert_to_#{named_conversion}", &converter)
+      # HACK: I'd prefer to not lean on calling the underlying convert method
+      # which means I will likely need some converter builder behavior.
+      define_method("convert_to_#{named_conversion}") do |value|
+        PowerConverter.convert(value, to: named_conversion)
+      end
       private "convert_to_#{named_conversion}"
     end
   end
