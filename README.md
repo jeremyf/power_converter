@@ -7,8 +7,7 @@
 
 ## About
 
-**PowerConverter** is a composition service module. It provides a way to define
-conversion methods.
+**PowerConverter** exposes a means for defining a named conversion method.
 
 *What is a conversion method?*
 
@@ -20,8 +19,24 @@ conversion methods.
 *Why conversion methods?*
 
 Because software is all about addressing a mapping problem. In my experience
-it has also exposed a means for easing the movement across application design
-boundaries.
+using conversion methods has provided a means for easing the movement across
+application design boundaries.
+
+*Why use the PowerConverter gem?*
+
+Excellent question.
+
+**The short-answer is consistency**. PowerConvert conversions will have a common
+form.
+
+**The longer-answer** is again related to consistency By using a common
+mechanism for definition, I'm hoping to reduce the nuanced variations that come
+from crafting conversions. They all have a very similar shape, and I'd like to
+provide tooling to help keep that shape.
+
+Why not worry about the shape? Because I would much rather focus on other
+concepts than "is this utility function similar enough to its sibling utility
+functions?"
 
 ## Usage
 
