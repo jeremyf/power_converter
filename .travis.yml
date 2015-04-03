@@ -7,5 +7,3 @@ rvm:
   - "2.0.0"
 
 script: 'rake'
-
-bundler_args: --without development debug doc
