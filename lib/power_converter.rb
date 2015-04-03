@@ -10,8 +10,8 @@ module PowerConverter
   # When you tried to find a named_converter and it did not exist, this is a
   # reasonable exception to expect.
   class ConverterNotFoundError < RuntimeError
-    def initialize(named_converter, named_converters)
-      super("Unable to find PowerConverter for #{named_converter} in #{named_converters.inspect}")
+    def initialize(named_converter, registered_converter_names)
+      super("Unable to find PowerConverter for #{named_converter} in #{registered_converter_names.inspect}")
     end
   end
 
@@ -45,12 +45,12 @@ module PowerConverter
   def converter_for(to)
     @conversions.fetch(to.to_s)
   rescue KeyError
-    raise ConverterNotFoundError.new(to, named_converters)
+    raise ConverterNotFoundError.new(named_conversion, registered_converter_names)
   end
 
   # @api public
   # @since 0.0.1
-  def named_converters
+  def registered_converter_names
     @conversions.keys
   end
 end
