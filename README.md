@@ -26,7 +26,7 @@ application design boundaries.
 
 Excellent question.
 
-**The short-answer is consistency**. *PowerConverter* helps you compose
+**The short-answer is consistency**. **PowerConverter** helps you compose
 conversions that have a common form.
 
 **The longer-answer** is again related to consistency. By using a common
@@ -34,9 +34,11 @@ mechanism for definition, I'm hoping to reduce the nuanced variations that come
 from crafting conversions. They all have a very similar shape, and I'd like to
 provide tooling to help keep that shape.
 
-Why not worry about the shape? Because I would much rather focus on other
-concepts than "is this utility function similar enough to its sibling utility
-functions?"
+I would much rather focus on other concepts than "is this conversion method
+similar enough to its sibling conversion methods?"
+
+In other words, relying on a common interface for defining a conversion method
+reduces the number surprises when interacting with conversion methods.
 
 ## Usage
 
