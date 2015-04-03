@@ -11,7 +11,7 @@ module PowerConverter
   # reasonable exception to expect.
   class ConverterNotFoundError < RuntimeError
     def initialize(named_converter, named_converters)
-      super("Unable to find PowerConverter for #{named_converter} in #{named_converters}")
+      super("Unable to find PowerConverter for #{named_converter} in #{named_converters.inspect}")
     end
   end
 
@@ -40,6 +40,6 @@ module PowerConverter
   end
 
   def named_converters
-    @conversions.keys.inspect
+    @conversions.keys
   end
 end
