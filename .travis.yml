@@ -6,6 +6,6 @@ rvm:
   - "2.2.1"
   - "2.0.0"
 
-script: 'bundle exec rake'
+script: 'rake'
 
 bundler_args: --without development debug doc
