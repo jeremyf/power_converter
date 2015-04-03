@@ -36,6 +36,10 @@ module PowerConverter
   def converter_for(to)
     @conversions.fetch(to.to_s)
   rescue KeyError
-    raise ConverterNotFoundError.new(to, @conversions.keys.inspect)
+    raise ConverterNotFoundError.new(to, named_converters)
+  end
+
+  def named_converters
+    @conversions.keys.inspect
   end
 end
