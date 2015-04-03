@@ -13,4 +13,6 @@ PowerConverter.conversion_for :boolean do |input|
     true
   end
 end
+
+PowerConverter.convert(object, to: :boolean)
 ```
