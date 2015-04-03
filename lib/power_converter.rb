@@ -19,19 +19,38 @@ module PowerConverter
 
   # @api public
   # @since 0.0.1
-  def define_conversion_for(name, &converter)
+  #
+  # @param named_conversion [String,Symbol] the name of the conversion that you
+  #   are declaring.
+  # @yield [value] A block that will be used to convert the given value
+  #   to the named thing.
+  # @yieldreturn returns the named thing.
+  def define_conversion_for(named_conversion, &converter)
     @conversions ||= {}
-    @conversions[name.to_s] = converter
+    @conversions[named_conversion.to_s] = converter
   end
 
   # @api public
   # @since 0.0.1
+  #
+  # @param value [Object] the thing that you will be converting
+  # @param [Hash] options the options used to perform the conversion
+  # @option options [Symbol] :to the named_conversion that has been registered
+  #
+  # @raise [ConverterNotFoundError] if the named converter is not found
+  #
+  # @see PowerConverter.define_conversion_for
   def convert(value, options = {})
     converter_for(options.fetch(:to)).call(value)
   end
 
   # @api public
   # @since 0.0.1
+  #
+  # @param named_conversion [String,Symbol] the name of the conversion that you
+  #   are requesting be wrapped in a conversion module.
+  #
+  # @return [Module] a conversion module to use for mixing in behavior
   def module_for(named_conversion)
     converter = converter_for(named_conversion)
     Module.new do
@@ -42,14 +61,24 @@ module PowerConverter
 
   # @api public
   # @since 0.0.1
-  def converter_for(to)
-    @conversions.fetch(to.to_s)
+  #
+  # @param named_conversion [String,Symbol]
+  #
+  # @return [#call] a registered converter
+  #
+  # @raise [ConverterNotFoundError] if the named converter is not found
+  #
+  # @see PowerConverter.define_conversion_for
+  def converter_for(named_conversion)
+    @conversions.fetch(named_conversion.to_s)
   rescue KeyError
     raise ConverterNotFoundError.new(named_conversion, registered_converter_names)
   end
 
   # @api public
   # @since 0.0.1
+  #
+  # @return [Array] of the registered converter's names
   def registered_converter_names
     @conversions.keys
   end
