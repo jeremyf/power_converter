@@ -1,5 +1,6 @@
 # PowerConverter
 
+[![Gem Version](https://badge.fury.io/rb/power_converter.svg)](http://badge.fury.io/rb/power_converter)
 [![Build Status](https://travis-ci.org/jeremyf/power_converter.png?branch=master)](https://travis-ci.org/jeremyf/power_converter)
 [![Documentation Status](http://inch-ci.org/github/jeremyf/power_converter.svg?branch=master)](http://inch-ci.org/github/jeremyf/power_converter)
 [![APACHE 2 License](http://img.shields.io/badge/APACHE2-license-blue.svg)](./LICENSE)
