@@ -25,6 +25,15 @@ module PowerConverter
   # @yield [value] A block that will be used to convert the given value
   #   to the named thing.
   # @yieldreturn returns the named thing.
+  #
+  # @example
+  #   PowerConverter.define_conversion_for :boolean do |input|
+  #     case input
+  #     when false, 0, '0', 'false', 'no', nil then false
+  #     else
+  #       true
+  #     end
+  #   end
   def define_conversion_for(named_conversion, &converter)
     @conversions ||= {}
     @conversions[named_conversion.to_s] = converter
@@ -40,6 +49,9 @@ module PowerConverter
   # @raise [ConverterNotFoundError] if the named converter is not found
   #
   # @see PowerConverter.define_conversion_for
+  #
+  # @example
+  #   PowerConverter.convert('true', to: :boolean)
   def convert(value, options = {})
     converter_for(options.fetch(:to)).call(value)
   end
@@ -51,6 +63,15 @@ module PowerConverter
   #   are requesting be wrapped in a conversion module.
   #
   # @return [Module] a conversion module to use for mixing in behavior
+  #
+  # @example
+  #   class Foo
+  #     attr_accessor :bar
+  #     include PowerConverter.module_for(:boolean)
+  #     def bar_as_boolean
+  #       convert_to_boolean(@bar)
+  #     end
+  #   end
   def module_for(named_conversion)
     converter = converter_for(named_conversion)
     Module.new do
@@ -69,6 +90,9 @@ module PowerConverter
   # @raise [ConverterNotFoundError] if the named converter is not found
   #
   # @see PowerConverter.define_conversion_for
+  #
+  # @example
+  #   PowerConverter.converter_for(:boolean).call(value)
   def converter_for(named_conversion)
     @conversions.fetch(named_conversion.to_s)
   rescue KeyError
