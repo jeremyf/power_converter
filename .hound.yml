@@ -23,3 +23,10 @@ LineLength:
   Description: 'Limit lines to 120 characters.'
   Max: 120
   Enabled: true
+
+Documentation:
+  Description: 'Document classes and non-namespace modules.'
+  Enabled: true
+  Exclude:
+  - test/**/*
+  - lib/**/version.rb
