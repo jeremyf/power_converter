@@ -1,5 +1,8 @@
 # PowerConverter
 
+[![Build Status](https://travis-ci.org/jeremyf/power_converter.png?branch=master)](https://travis-ci.org/jeremyf/power_converter)
+[![APACHE 2 License](http://img.shields.io/badge/APACHE2-license-blue.svg)](./LICENSE)
+
 A placeholder for implementing a conversion module pattern.
 
 Exposing a means of registering conversions. These can be accessed at the module
