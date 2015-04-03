@@ -22,8 +22,8 @@ module PowerConverter
     @conversions[name.to_s] = block
   end
 
-  def convert(value, to:)
-    converter_for(to).call(value)
+  def convert(value, options = {})
+    converter_for(options.fetch(:to)).call(value)
   end
 
   def module_for(named_conversion)
