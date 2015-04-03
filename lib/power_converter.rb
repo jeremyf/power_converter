@@ -27,7 +27,7 @@ module PowerConverter
     # @example
     #   raise ConverterNotFoundError.new(:boolean, [:hello, :world])
     def initialize(named_converter, defined_converter_names)
-      super("Unable to find PowerConverter for #{named_converter} in #{defined_converter_names.inspect}")
+      super("Unable to find PowerConverter for #{named_converter} in #{defined_converter_names.inspect}.")
     end
   end
 
@@ -42,7 +42,7 @@ module PowerConverter
     # @example
     #   raise ConversionError.new(:boolean, [:hello, :world])
     def initialize(value, named_converter)
-      super("Unable to convert #{value.inspect} to #{named_converter}")
+      super("Unable to convert #{value.inspect} to '#{named_converter}'.")
     end
   end
 
