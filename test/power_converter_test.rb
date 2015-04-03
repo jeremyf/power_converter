@@ -27,7 +27,7 @@ class TestPowerConverter < Minitest::Test
   end
 
   def test_raises_error_when_conversion_is_not_defined
-    assert_raises(KeyError) do
+    assert_raises(PowerConverter::ConverterNotFoundError) do
       PowerConverter.convert(true, to: :never)
     end
   end
