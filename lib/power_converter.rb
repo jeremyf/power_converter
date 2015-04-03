@@ -5,7 +5,7 @@ require "power_converter/version"
 #
 # What is a conversion method?
 #
-# > A well-established Ruby idiom for methods which “do the right thing” to
+# > A well-established Ruby idiom for methods which "do the right thing" to
 # > convery any reasonable input value into a desired class.
 # >
 # > http://devblog.avdi.org/2012/05/07/a-ruby-conversion-idiom/
