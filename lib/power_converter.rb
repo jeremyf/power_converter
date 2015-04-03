@@ -8,6 +8,6 @@ module PowerConverter
   end
 
   def convert(value, to:)
-    @conversions[to].call(value)
+    @conversions.fetch(to).call(value)
   end
 end

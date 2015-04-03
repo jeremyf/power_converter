@@ -11,7 +11,18 @@ PowerConverter.conversion_for :boolean do |input|
 end
 
 class TestPowerConverter < Minitest::Test
-  def test_conversion_definition
-    assert_equal false, PowerConverter.convert('0', to: :boolean)
+  [
+    ['0', false, :boolean],
+    ['false', false, :boolean],
+    ['no', false, :boolean],
+    [0, false, :boolean],
+    [false, false, :boolean],
+    [nil, false, :boolean],
+    [1, true, :boolean],
+    ['true', true, :boolean],
+  ].each_with_index do |(actual, expected, conversion), index|
+    define_method "test_conversion_scenario_#{index}" do
+      assert_equal expected, PowerConverter.convert(actual, to: conversion)
+    end
   end
 end
