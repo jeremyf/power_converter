@@ -1,5 +1,11 @@
 require "power_converter/version"
 
+# PowerConverter is a composition service module. It provides a way to define
+# conversion methods.
+#
+# What is a conversion method?
+#
+# TODO: Define conversion method intent
 module PowerConverter
   class ConverterNotFoundError < RuntimeError
     def initialize(to, named_converters)
