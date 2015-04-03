@@ -22,6 +22,8 @@ module PowerConverter
     # @param named_converter [#to_s]
     # @param defined_converter_names [Array]
     #
+    # You had one job...to register a converter. Now you get an exception.
+    #
     # @example
     #   raise ConverterNotFoundError.new(:boolean, [:hello, :world])
     def initialize(named_converter, defined_converter_names)
@@ -34,6 +36,8 @@ module PowerConverter
   class ConversionError < RuntimeError
     # @param value [Object]
     # @param named_converter [#to_s]
+    #
+    # Do or do not. There is no try.
     #
     # @example
     #   raise ConversionError.new(:boolean, [:hello, :world])
