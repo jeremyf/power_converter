@@ -31,4 +31,23 @@ class TestPowerConverter < Minitest::Test
       PowerConverter.convert(true, to: :never)
     end
   end
+
+  def setup
+    @object = Class.new do
+      include PowerConverter.module_for(:boolean)
+      def wraps_conversion(value)
+        convert_to_boolean(value)
+      end
+    end.new
+  end
+
+  def test_mixed_in_conversion_method_is_private
+    assert_raises(NoMethodError) do
+      @object.convert_to_boolean
+    end
+  end
+
+  def test_mixed_in_conversion_method_can_be_used
+    assert_equal(true, @object.wraps_conversion('1'))
+  end
 end

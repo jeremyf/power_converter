@@ -14,7 +14,19 @@ module PowerConverter
   end
 
   def convert(value, to:)
-    @conversions.fetch(to.to_s).call(value)
+    converter_for(to).call(value)
+  end
+
+  def module_for(named_conversion)
+    converter = converter_for(named_conversion)
+    mod = Module.new do
+      define_method("convert_to_#{named_conversion}", &converter)
+      private "convert_to_#{named_conversion}"
+    end
+  end
+
+  def converter_for(to)
+    @conversions.fetch(to.to_s)
   rescue KeyError
     raise ConverterNotFoundError.new(to, @conversions.keys.inspect)
   end
