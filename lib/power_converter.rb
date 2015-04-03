@@ -17,15 +17,21 @@ module PowerConverter
 
   module_function
 
+  # @api public
+  # @since 0.0.1
   def define_conversion_for(name, &converter)
     @conversions ||= {}
     @conversions[name.to_s] = converter
   end
 
+  # @api public
+  # @since 0.0.1
   def convert(value, options = {})
     converter_for(options.fetch(:to)).call(value)
   end
 
+  # @api public
+  # @since 0.0.1
   def module_for(named_conversion)
     converter = converter_for(named_conversion)
     Module.new do
@@ -34,12 +40,16 @@ module PowerConverter
     end
   end
 
+  # @api public
+  # @since 0.0.1
   def converter_for(to)
     @conversions.fetch(to.to_s)
   rescue KeyError
     raise ConverterNotFoundError.new(to, named_converters)
   end
 
+  # @api public
+  # @since 0.0.1
   def named_converters
     @conversions.keys
   end
