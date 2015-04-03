@@ -2,7 +2,7 @@ require 'minitest/autorun'
 $LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
 require 'power_converter'
 
-PowerConverter.conversion_for :boolean do |input|
+PowerConverter.define_conversion_for :boolean do |input|
   case input
   when false, 0, '0', 'false', 'no', nil then false
   else
