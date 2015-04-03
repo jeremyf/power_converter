@@ -16,6 +16,7 @@ module PowerConverter
   end
 
   module_function
+
   def conversion_for(name, &block)
     @conversions ||= {}
     @conversions[name.to_s] = block
@@ -27,7 +28,7 @@ module PowerConverter
 
   def module_for(named_conversion)
     converter = converter_for(named_conversion)
-    mod = Module.new do
+    Module.new do
       define_method("convert_to_#{named_conversion}", &converter)
       private "convert_to_#{named_conversion}"
     end

@@ -19,7 +19,7 @@ class TestPowerConverter < Minitest::Test
     [false, false, :boolean],
     [nil, false, :boolean],
     [1, true, :boolean],
-    ['true', true, :boolean],
+    ['true', true, :boolean]
   ].each_with_index do |(actual, expected, conversion), index|
     define_method "test_conversion_scenario_#{index}" do
       assert_equal expected, PowerConverter.convert(actual, to: conversion)
