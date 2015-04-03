@@ -19,6 +19,7 @@ module PowerConverter
   # When you tried to find a named_converter and it did not exist, this is a
   # reasonable exception to expect.
   class ConverterNotFoundError < RuntimeError
+    # :nodoc:
     def initialize(named_converter, defined_converter_names)
       super("Unable to find PowerConverter for #{named_converter} in #{defined_converter_names.inspect}")
     end
