@@ -25,4 +25,10 @@ class TestPowerConverter < Minitest::Test
       assert_equal expected, PowerConverter.convert(actual, to: conversion)
     end
   end
+
+  def test_raises_error_when_conversion_is_not_defined
+    assert_raises(KeyError) do
+      PowerConverter.convert(true, to: :never)
+    end
+  end
 end
