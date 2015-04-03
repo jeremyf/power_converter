@@ -32,6 +32,14 @@ class TestPowerConverter < Minitest::Test
     end
   end
 
+  def test_power_converter_implements_convert_to_named_conversion_method
+    assert_equal true, PowerConverter.convert_to_boolean('true')
+  end
+
+  def test_power_converter_responds_to_convert_to_named_conversion_method
+    assert_equal true, PowerConverter.respond_to?(:convert_to_boolean, true)
+  end
+
   def setup
     @object = Class.new do
       include PowerConverter.module_for(:boolean)

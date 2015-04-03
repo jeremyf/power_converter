@@ -52,4 +52,8 @@ PowerConverter.define_conversion_for :boolean do |input|
 end
 
 PowerConverter.convert(object, to: :boolean)
+
+# OR
+
+PowerConverter.convert_to_boolean(object)
 ```

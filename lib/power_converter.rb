@@ -76,6 +76,10 @@ module PowerConverter
   #       true
   #     end
   #   end
+  #
+  #   PowerConverter.convert(object, to: :boolean)
+  #   PowerConverter.convert_to_boolean(object)
+  #
   # @see http://devblog.avdi.org/2012/05/07/a-ruby-conversion-idiom/ Avdi
   #   Grimm's post on "A Ruby Conversion Idiom"
   #
@@ -129,6 +133,9 @@ module PowerConverter
     fail ConversionError.new(value, named_converter)
   end
 
+  # :nodoc:
+  CONVERSION_METHOD_PREFIX = "convert_to_".freeze
+
   # @api public
   # @since 0.0.1
   #
@@ -155,10 +162,10 @@ module PowerConverter
     Module.new do
       # HACK: I'd prefer to not lean on calling the underlying convert method
       # which means I will likely need some converter builder behavior.
-      define_method("convert_to_#{named_conversion}") do |value|
+      define_method("#{CONVERSION_METHOD_PREFIX}#{named_conversion}") do |value|
         PowerConverter.convert(value, to: named_conversion)
       end
-      private "convert_to_#{named_conversion}"
+      private "#{CONVERSION_METHOD_PREFIX}#{named_conversion}"
     end
   end
 
@@ -193,4 +200,36 @@ module PowerConverter
   def defined_converter_names
     @defined_conversions.keys
   end
+
+  # :nodoc:
+  CONVERSION_METHOD_REGEXP = /\A#{CONVERSION_METHOD_PREFIX}(.*)\Z/.freeze
+
+  # :nodoc:
+  def method_missing(method_name, *args, &block)
+    named_converter = extract_named_converter_from(method_name)
+    if named_converter
+      convert(*args, to: named_converter)
+    else
+      super
+    end
+  end
+  private_class_method :method_missing
+
+  # :nodoc:
+  def extract_named_converter_from(method_name)
+    match = method_name.to_s.match(CONVERSION_METHOD_REGEXP)
+    match.captures[0] if match
+  end
+  private_class_method :extract_named_converter_from
+
+  # :nodoc:
+  def respond_to_missing?(method_name, include_private = false)
+    named_converter = extract_named_converter_from(method_name)
+    if named_converter
+      @defined_conversions.key?(named_converter.to_s)
+    else
+      super
+    end
+  end
+  private_class_method :respond_to_missing?
 end
