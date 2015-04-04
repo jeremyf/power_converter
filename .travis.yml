@@ -7,3 +7,7 @@ rvm:
   - "2.0.0"
 
 script: 'bundle exec rake'
+
+addons:
+  code_climate:
+    repo_token: d414a18887ea6615a86dd7a267ee00d316724bf70b58259fa2cc3b4231e5de10
