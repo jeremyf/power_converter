@@ -133,7 +133,7 @@ module PowerConverter
     fail ConversionError.new(value, named_converter)
   end
 
-  # :nodoc:
+  # When building a dynamic conversion method this is its prefix.
   CONVERSION_METHOD_PREFIX = "convert_to_".freeze
 
   # @api public
@@ -196,15 +196,30 @@ module PowerConverter
   # A convenience method for seeing the names of all converters that have been
   # defined.
   #
-  # @return [Array] of the registered converter's names
+  # @return [Array] of the defined converter's names
   def defined_converter_names
     @defined_conversions.keys
   end
 
-  # :nodoc:
-  CONVERSION_METHOD_REGEXP = /\A#{CONVERSION_METHOD_PREFIX}(.*)\Z/.freeze
+  # Useful for when you want to know if a method name is a valid conversion
+  # method name.
+  CONVERSION_METHOD_REGEXP = /\A#{CONVERSION_METHOD_PREFIX}(.+)\Z/.freeze
 
-  # :nodoc:
+  # @api private
+  # @since 0.0.2
+  #
+  # Handle attempts to call module level conversions directly off of the
+  # PowerConverter module.
+  #
+  # @example
+  #   PowerConverter.define_conversion_for(:boolean) { |input| ... }
+  #   PowerConverter.convert_to_boolean(a_value)
+  #
+  # @param method_name [Symbol]
+  # @param args [Array] splat arguements that would be passed on-ward
+  # @param block [#call]
+  #
+  # @see PowerConverter::CONVERSION_METHOD_PREFIX
   def method_missing(method_name, *args, &block)
     named_converter = extract_named_converter_from(method_name)
     if named_converter
@@ -215,14 +230,37 @@ module PowerConverter
   end
   private_class_method :method_missing
 
-  # :nodoc:
+  # @api private
+  # @since 0.0.2
+  #
+  # Based on the given method_name extract the name of a defined converter.
+  #
+  # @param method_name [#to_s] a method name that could be in a named conversion
+  #   method format
+  #
+  # @return [String, nil] Will return the named_converter a match is found,
+  #   otherwise nil
   def extract_named_converter_from(method_name)
     match = method_name.to_s.match(CONVERSION_METHOD_REGEXP)
     match.captures[0] if match
   end
   private_class_method :extract_named_converter_from
 
-  # :nodoc:
+  # @api private
+  # @since 0.0.2
+  #
+  # Determine if the conversion module responds to a potentially registered
+  # conversion method.
+  #
+  # @example
+  #   PowerConverter.define_conversion_for(:boolean) { |input| ... }
+  #   PowerConverter.respond_to?(:convert_to_boolean)
+  #   => true
+  #
+  # @param method_name [Symbol] the name of the method that the object might
+  #   respond to
+  # @param include_private [Boolean] if true skip private/protected methods
+  #   otherwise include them
   def respond_to_missing?(method_name, include_private = false)
     named_converter = extract_named_converter_from(method_name)
     if named_converter
