@@ -38,8 +38,16 @@ class TestPowerConverter < Minitest::Test
     assert_equal true, PowerConverter.convert_to_boolean('true')
   end
 
+  def test_power_converter_gracefully_escalates_method_missing
+    assert_raises(NoMethodError) { PowerConverter.borked }
+  end
+
   def test_power_converter_responds_to_convert_to_named_conversion_method
     assert_equal true, PowerConverter.respond_to?(:convert_to_boolean, true)
+  end
+
+  def test_power_converter_gracefully_escalates_respond_to_missing
+    assert_equal(false, PowerConverter.respond_to?(:borked))
   end
 
   def setup

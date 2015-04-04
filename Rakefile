@@ -15,4 +15,14 @@ rescue LoadError
   puts 'Unable to load RuboCop. Who will enforce your Ruby styleguide now?'
 end
 
-task default: [:test, :rubocop]
+task :validate_coverage_goals do
+  require 'json'
+  goal_percentage = 100
+  json_document = File.new(File.expand_path('../coverage/.last_run.json', __FILE__)).read
+  coverage_percentage = JSON.parse(json_document).fetch('result').fetch('covered_percent').to_i
+  if goal_percentage > coverage_percentage
+    abort("Code Coverage Goal Not Met:\n\t#{goal_percentage}%\tExpected\n\t#{coverage_percentage}%\tActual")
+  end
+end
+
+task default: [:test, :validate_coverage_goals, :rubocop]
