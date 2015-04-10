@@ -125,10 +125,11 @@ module PowerConverter
   #   PowerConverter.convert(Foo.new, to: :bar)
   #   => :hello_world
   #
-  def convert(value, options = {})
+  def convert(value, *args)
+    options = args.pop
     named_converter = options.fetch(:to)
     return value.public_send("to_#{named_converter}") if value.respond_to?("to_#{named_converter}", false)
-    returning_value = converter_for(named_converter).call(value)
+    returning_value = converter_for(named_converter).call(value, *args)
     return returning_value unless returning_value.nil?
     fail ConversionError.new(value, named_converter)
   end
