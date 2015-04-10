@@ -41,8 +41,10 @@ module PowerConverter
     #
     # @example
     #   raise ConversionError.new(:boolean, [:hello, :world])
-    def initialize(value, named_converter)
-      super("Unable to convert #{value.inspect} to '#{named_converter}'.")
+    def initialize(value, options)
+      named_converter = options[:to]
+      scope = options[:scope]
+      super("Unable to convert #{value.inspect} to '#{named_converter}' (scope: #{scope.inspect}.")
     end
   end
 
@@ -125,13 +127,13 @@ module PowerConverter
   #   PowerConverter.convert(Foo.new, to: :bar)
   #   => :hello_world
   #
-  def convert(value, *args)
-    options = args.pop
+  def convert(value, options = {})
     named_converter = options.fetch(:to)
+    scope = options.fetch(:scope, nil)
     return value.public_send("to_#{named_converter}") if value.respond_to?("to_#{named_converter}", false)
-    returning_value = converter_for(named_converter).call(value, *args)
+    returning_value = converter_for(named_converter).call(value, *scope)
     return returning_value unless returning_value.nil?
-    fail ConversionError.new(value, named_converter)
+    fail ConversionError.new(value, options)
   end
 
   # When building a dynamic conversion method this is its prefix.
