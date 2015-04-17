@@ -58,8 +58,8 @@ module PowerConverter
   # Responsible for defining a conversion method and a "shovel-ready" conversion
   # module; because maybe you want a mixin for convenience reasons.
   #
-  # @note If your defined converter returns `nil`, it is assumed if the
-  #   conversion failed and a [PowerConverter::ConversionError] exception should
+  # @note If your defined converter returns `nil`, it is assumed that the
+  #   conversion failed and a [PowerConverter::ConversionError] exception will
   #   be thrown.
   #
   # @param named_conversion [String,Symbol] the name of the conversion that you
