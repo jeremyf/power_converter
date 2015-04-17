@@ -35,7 +35,9 @@ module PowerConverter
   # great exception to raise.
   class ConversionError < RuntimeError
     # @param value [Object]
-    # @param named_converter [#to_s]
+    # @param options [Hash]
+    # @option options [Symbol] :to what did we just attempt to convert?
+    # @option options [Symbol] :scope is there a scope related to this conversion attempt?
     #
     # Do or do not. There is no try.
     #
