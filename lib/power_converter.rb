@@ -97,6 +97,26 @@ module PowerConverter
   end
 
   # @api public
+  # @since 0.0.4
+  #
+  # You may define an alias of a defined (or to be defined) power converter.
+  #
+  # @param aliased_named_conversion [String,Symbol] the name of the conversion that you
+  #   are declaring.
+  # @param [Hash] options the options used to perform the conversion
+  # @option options [Symbol] :is_alias_of the aliased_named_conversion that we
+  #   will be using for to perform the conversion.
+  #
+  # @return void
+  #
+  # @example
+  #   PowerConverter.define_alias(:true_or_false, is_alias_of: :boolean)
+  def define_alias(aliased_named_conversion, options = {})
+    @aliased_conversions ||= {}
+    @aliased_conversions[aliased_named_conversion.to_s] = options.fetch(:is_alias_of)
+  end
+
+  # @api public
   # @since 0.0.1
   #
   # Convert the given `value` via the named `:to` converter. As a short-circuit
@@ -187,10 +207,13 @@ module PowerConverter
   #
   # @example
   #   PowerConverter.converter_for(:boolean).call(value)
+  #
+  # @note There are no protections for infinite alias loops.
   def converter_for(named_conversion)
-    @defined_conversions.fetch(named_conversion.to_s)
-  rescue KeyError
-    raise ConverterNotFoundError.new(named_conversion, defined_converter_names)
+    key = named_conversion.to_s
+    return defined_conversions[key] if defined_conversions.key?(key)
+    return converter_for(aliased_conversions[key]) if aliased_conversions.key?(key)
+    fail ConverterNotFoundError.new(named_conversion, defined_converter_names)
   end
 
   # @api public
@@ -201,7 +224,7 @@ module PowerConverter
   #
   # @return [Array] of the defined converter's names
   def defined_converter_names
-    @defined_conversions.keys
+    defined_conversions.keys + aliased_conversions.keys
   end
 
   # Useful for when you want to know if a method name is a valid conversion
@@ -273,4 +296,14 @@ module PowerConverter
     end
   end
   private_class_method :respond_to_missing?
+
+  def defined_conversions
+    @defined_conversions || {}
+  end
+  private_class_method :defined_conversions
+
+  def aliased_conversions
+    @aliased_conversions || {}
+  end
+  private_class_method :aliased_conversions
 end

@@ -54,6 +54,12 @@ class TestPowerConverter < Minitest::Test
     assert_equal(false, PowerConverter.respond_to?(:borked))
   end
 
+  PowerConverter.define_alias(:true_or_false, is_alias_of: :boolean)
+
+  def test_declaration_and_usage_of_an_alias
+    assert_equal(PowerConverter.convert('1', to: :boolean), PowerConverter.convert('1', to: :true_or_false))
+  end
+
   def setup
     @object = Class.new do
       include PowerConverter.module_for(:boolean)
