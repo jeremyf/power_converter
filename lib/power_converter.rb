@@ -183,6 +183,9 @@ module PowerConverter
   #   end
   #
   # @todo Allow for the inclusion of multiple power converter named types.
+  #
+  # @note This does not allow for the robustness of the .convert method. I'm
+  #   wondering about its ongoing value.
   def module_for(named_conversion)
     Module.new do
       # HACK: I'd prefer to not lean on calling the underlying convert method
