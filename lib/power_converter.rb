@@ -46,7 +46,7 @@ module PowerConverter
     def initialize(value, options)
       named_converter = options[:to]
       scope = options[:scope]
-      super("Unable to convert #{value.inspect} to '#{named_converter}' (scope: #{scope.inspect}.")
+      super("Unable to convert #{value.inspect} to '#{named_converter}' (scope: #{scope.inspect}).")
     end
   end
 
