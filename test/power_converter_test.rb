@@ -63,7 +63,7 @@ class TestPowerConverter < Minitest::Test
   def setup
     @object = Class.new do
       include PowerConverter.module_for(:boolean)
-      def wraps_conversion(value)
+      define_method :wraps_conversion do |value|
         convert_to_boolean(value)
       end
     end.new
