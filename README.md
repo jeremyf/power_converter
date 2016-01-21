@@ -44,18 +44,43 @@ reduces the number surprises when interacting with conversion methods.
 
 ## Usage
 
+Name and define conversions via a block.
+
 ```ruby
-PowerConverter.define_conversion_for :boolean do |input|
-  case input
-  when false, 0, '0', 'false', 'no', nil then false
-  else
-    true
-  end
-end
-
-PowerConverter.convert(object, to: :boolean)
-
-# OR
-
-PowerConverter.convert_to_boolean(object)
+PowerConverter.define_conversion_for(:always_true) { true }
+PowerConverter.define_conversion_for(:always_nil) { nil }
 ```
+
+Call the conversions via a couple of methods:
+
+```ruby
+PowerConverter.convert(nil, to: :always_true)
+# or
+PowerConverter.convert_to_always_true(nil)
+```
+
+When you call a conversion, if the conversion block evaluates to `nil`, PowerConverter will fail with a `PowerConverter::ConversionError` exception.
+
+```ruby
+assert_raises(PowerConverter::ConversionError) { PowerConverter.convert(true, to: :always_nil) }
+```
+
+If you call the conversion and pass a block, the block will be the fallback for an evaluated `nil`.
+
+```ruby
+assert_equal('FALLBACK', PowerConverter.convert(true, to: :always_nil) { 'FALLBACK'} )
+```
+
+If the object you are attempting to convert responds to the `to_<conversion_name>` method, that method will be called.
+
+```ruby
+Thing = Struct.new(:to_always_nil)
+thing = Thing.new("result of to_always_nil")
+assert_equal("result of to_always_nil", PowerConverter.convert(thing, to: :always_nil))
+```
+
+### TODO
+
+* Write about module declaration
+* Write about scope
+* Write about alias
