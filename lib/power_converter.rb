@@ -191,11 +191,8 @@ module PowerConverter
   #   wondering about its ongoing value.
   def module_for(named_conversion)
     Module.new do
-      # HACK: I'd prefer to not lean on calling the underlying convert method
-      # which means I will likely need some converter builder behavior.
-      define_method("#{CONVERSION_METHOD_PREFIX}#{named_conversion}") do |value|
-        PowerConverter.convert(value, to: named_conversion)
-      end
+      extend Forwardable
+      def_delegator PowerConverter, "#{CONVERSION_METHOD_PREFIX}#{named_conversion}"
       private "#{CONVERSION_METHOD_PREFIX}#{named_conversion}"
     end
   end

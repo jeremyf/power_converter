@@ -82,6 +82,10 @@ class TestPowerConverter < Minitest::Test
       define_method :wraps_conversion do |value|
         convert_to_boolean(value)
       end
+      include PowerConverter.module_for(:padded_integer)
+      define_method :padded_integer_for do |value|
+        convert_to_padded_integer(value) { 'this_failed' }
+      end
     end.new
   end
 
@@ -93,6 +97,10 @@ class TestPowerConverter < Minitest::Test
 
   def test_mixed_in_conversion_method_can_be_used
     assert_equal(true, @object.wraps_conversion('1'))
+  end
+
+  def test_mixed_in_conversion_method_can_be_used_with_default_value_block
+    assert_equal('this_failed', @object.padded_integer_for('A'))
   end
 
   PowerConverter.define_conversion_for :foo do |input|
