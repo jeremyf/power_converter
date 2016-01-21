@@ -8,6 +8,14 @@ require 'minitest/autorun'
 $LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
 require 'power_converter'
 
+PowerConverter.define_conversion_for :padded_integer do |input|
+  begin
+    format("%09d", input)
+  rescue ArgumentError, TypeError
+    nil
+  end
+end
+
 PowerConverter.define_conversion_for :boolean do |input|
   case input
   when false, 0, '0', 'false', 'no', nil then false
@@ -30,6 +38,14 @@ class TestPowerConverter < Minitest::Test
     define_method "test_conversion_scenario_#{index}" do
       assert_equal expected, PowerConverter.convert(actual, to: conversion)
     end
+  end
+
+  def test_it_will_yield_if_conversion_returns_nil
+    assert_equal 'failed', PowerConverter.convert('abc', to: :padded_integer) { 'failed' }
+  end
+
+  def test_it_will_yield_if_method_missing_based_conversion_returns_nil
+    assert_equal 'failed', PowerConverter.convert_to_padded_integer('abc') { 'failed' }
   end
 
   def test_raises_error_when_conversion_is_not_defined

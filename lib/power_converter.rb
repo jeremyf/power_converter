@@ -130,6 +130,8 @@ module PowerConverter
   # @option options [Symbol] :to the named_conversion that has been registered
   #
   # @return [Object] the resulting converted object
+  # @yield Yield control to caller if the value could not be converted; This is a good fallback mechanism.
+  #
   #
   # @raise [ConverterNotFoundError] if the named converter is not found
   # @raise [ConversionError] if the named converter returned a nil value
@@ -155,6 +157,7 @@ module PowerConverter
     return value.public_send("to_#{named_converter}") if value.respond_to?("to_#{named_converter}", false)
     returning_value = converter_for(named_converter).call(value, *scope)
     return returning_value unless returning_value.nil?
+    return yield if block_given?
     fail ConversionError.new(value, options)
   end
 
@@ -234,7 +237,7 @@ module PowerConverter
 
   # Useful for when you want to know if a method name is a valid conversion
   # method name.
-  CONVERSION_METHOD_REGEXP = /\A#{CONVERSION_METHOD_PREFIX}(.+)\Z/.freeze
+  CONVERSION_METHOD_REGEXP = /\A#{CONVERSION_METHOD_PREFIX}(.+)\Z/
 
   # @api private
   # @since 0.0.2
@@ -254,7 +257,7 @@ module PowerConverter
   def method_missing(method_name, *args, &block)
     named_converter = extract_named_converter_from(method_name)
     if named_converter
-      convert(*args, to: named_converter)
+      convert(*args, to: named_converter, &block)
     else
       super
     end
