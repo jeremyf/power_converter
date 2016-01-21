@@ -13,7 +13,9 @@
 AllCops:
   Include:
     - Rakefile
-  RunRailsCops: false
+
+Rails:
+  Enabled: false
 
 StringLiterals:
   Description: 'Checks if uses of quotes match the configured preference.'
