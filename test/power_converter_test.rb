@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'simplecov'
 if ENV['TRAVIS']
   require "codeclimate-test-reporter"

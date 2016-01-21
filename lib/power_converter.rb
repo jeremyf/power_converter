@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "power_converter/version"
 
 # PowerConverter is a composition service module. It provides a way to define
