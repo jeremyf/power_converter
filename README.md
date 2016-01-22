@@ -49,6 +49,7 @@ Name and define conversions via a block.
 ```ruby
 PowerConverter.define_conversion_for(:always_true) { true }
 PowerConverter.define_conversion_for(:always_nil) { nil }
+PowerConverter.define_conversion_for(:boolean) { |value| !!value }
 ```
 
 Call the conversions via a couple of methods:
@@ -79,8 +80,27 @@ thing = Thing.new("result of to_always_nil")
 assert_equal("result of to_always_nil", PowerConverter.convert(thing, to: :always_nil))
 ```
 
+You can also declare an alias for a registered `PowerConverter`.
+
+```ruby
+PowerConverter.define_alias(:true_or_false, is_alias_of: :boolean)
+PowerConverter.convert("Hello", to: :boolean)
+```
+
+At times, a conversion may need additional information to be successful.
+
+```ruby
+PowerConverter.define_conversion_for(:user_action) do |input, user|
+  case input
+  when String, Symbol then user.actions.find_by(name: input)
+  when Model::Action
+    input.user == user ? input : nil
+  end
+end
+
+PowerConverter.convert('start', to: :user_action, scope: a_user)
+```
+
 ### TODO
 
 * Write about module declaration
-* Write about scope
-* Write about alias
