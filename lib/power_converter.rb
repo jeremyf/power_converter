@@ -159,7 +159,7 @@ module PowerConverter
     returning_value = converter_for(named_converter).call(value, *scope)
     return returning_value unless returning_value.nil?
     return yield if block_given?
-    fail ConversionError.new(value, options)
+    raise ConversionError.new(value, options)
   end
 
   # When building a dynamic conversion method this is its prefix.
@@ -219,7 +219,7 @@ module PowerConverter
     key = named_conversion.to_s
     return defined_conversions[key] if defined_conversions.key?(key)
     return converter_for(aliased_conversions[key]) if aliased_conversions.key?(key)
-    fail ConverterNotFoundError.new(named_conversion, defined_converter_names)
+    raise ConverterNotFoundError.new(named_conversion, defined_converter_names)
   end
 
   # @api public
