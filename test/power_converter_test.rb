@@ -136,4 +136,8 @@ class TestPowerConverter < Minitest::Test
   def test_defined_conversions_can_have_multipe_value
     assert_equal([1, 2], PowerConverter.convert(1, scope: 2, to: :bork))
   end
+
+  def test_defined_conversions_with_method_missing_call_can_have_multipe_value
+    assert_equal([1, 2], PowerConverter.convert_to_bork(1, scope: 2))
+  end
 end

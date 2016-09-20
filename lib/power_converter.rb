@@ -249,13 +249,14 @@ module PowerConverter
   #
   # @param method_name [Symbol]
   # @param args [Array] splat arguements that would be passed on-ward
+  # @param kwargs [Hash] keyword arguements
   # @param block [#call]
   #
   # @see PowerConverter::CONVERSION_METHOD_PREFIX
-  def method_missing(method_name, *args, &block)
+  def method_missing(method_name, *args, **kwargs, &block)
     named_converter = extract_named_converter_from(method_name)
     if named_converter
-      convert(*args, to: named_converter, &block)
+      convert(*args, kwargs.merge(to: named_converter), &block)
     else
       super
     end
